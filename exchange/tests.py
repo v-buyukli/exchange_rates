@@ -5,9 +5,8 @@ import responses
 
 from .exchange_provider import MonoExchange, PrivatExchange
 
-root = pathlib.Path(__file__).parent
 
-# Create your tests here.
+root = pathlib.Path(__file__).parent
 
 
 @responses.activate
