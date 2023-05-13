@@ -17,10 +17,10 @@ def start_exchange(vendor, currency_a, currency_b):
         print(f"Rate already exists for {current_date} {vendor} {currency_a} {currency_b}")
         return
 
-    if vendor == "privat":
-        exchange = PrivatExchange(vendor, currency_a, currency_b)
-    elif vendor == "mono":
+    if vendor == "mono":
         exchange = MonoExchange(vendor, currency_a, currency_b)
+    elif vendor == "privat":
+        exchange = PrivatExchange(vendor, currency_a, currency_b)
     else:
         exchange = Exchange(vendor, currency_a, currency_b)
     exchange.get_rate()
