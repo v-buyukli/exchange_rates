@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exchange</title>
+</head>
+<body>
+Notes: <br>
+- Currency exchange at the best rate for the user from available sources <br>
+- Amount is only a positive integer <br>
+<form method="post" action="{% url 'exchange-result' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Exchange">
+</form>
+</body>
+</html>

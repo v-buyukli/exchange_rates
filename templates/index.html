@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Exchange</title>
+    <title>Exchange home</title>
 </head>
+
 <body>
-{{ text }} <br><br>
-<a href="{% url 'exchange-rates' %}">Exchange rates</a>
+    {{ context }} <br><br>
+    <a href="{% url 'exchange-rates' %}">Exchange rates</a> <br>
+    <a href="{% url 'exchange' %}">Exchange</a>
 </body>
 </html>
