@@ -21,11 +21,11 @@ ____
 
 6. Starting the worker process:
 
-    `celery -A python_pro_task9 worker -l INFO` 
+    `celery -A exchange_rates worker -l INFO` 
 
 7. Start the celery beat service:
 
-   `celery -A exchange_rates beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler`
+   `celery -A exchange_rates beat`
 
 The app receives daily exchange rates for UAH-USD and UAH-EUR. 
 But for tests, you can change the time in the `/exchange_rates/celery.py` by changing the value of the variable `time_period`.

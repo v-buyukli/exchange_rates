@@ -30,14 +30,24 @@ app.conf.beat_schedule = {
         "schedule": time_period,
         "args": ("mono", "EUR", "UAH"),
     },
+    "privat-USD-UAH": {
+        "task": "exchange.tasks.start_exchange",
+        "schedule": time_period,
+        "args": ("privat", "USD", "UAH"),
+    },
     "privat-EUR-UAH": {
         "task": "exchange.tasks.start_exchange",
         "schedule": time_period,
         "args": ("privat", "EUR", "UAH"),
     },
-    "privat-USD-UAH": {
+    "vkurse-USD-UAH": {
         "task": "exchange.tasks.start_exchange",
         "schedule": time_period,
-        "args": ("privat", "USD", "UAH"),
+        "args": ("vkurse", "USD", "UAH"),
+    },
+    "vkurse-EUR-UAH": {
+        "task": "exchange.tasks.start_exchange",
+        "schedule": time_period,
+        "args": ("vkurse", "EUR", "UAH"),
     },
 }

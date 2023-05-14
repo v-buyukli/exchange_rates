@@ -2,7 +2,8 @@ import datetime
 
 from celery import shared_task
 
-from .exchange_provider import Exchange, MonoExchange, PrivatExchange
+from .exchange_provider import (Exchange, MonoExchange, PrivatExchange,
+                                VkurseExchange)
 from .models import Rate
 
 
@@ -20,7 +21,9 @@ def start_exchange(vendor, currency_a, currency_b):
     if vendor == "mono":
         exchange = MonoExchange(vendor, currency_a, currency_b)
     elif vendor == "privat":
-        exchange = PrivatExchange(vendor, currency_a, currency_b)
+        exchange = PrivatExchange(vendor, currency_a, currency_b, current_date)
+    elif vendor == "vkurse":
+        exchange = VkurseExchange(vendor, currency_a, currency_b)
     else:
         exchange = Exchange(vendor, currency_a, currency_b)
     exchange.get_rate()

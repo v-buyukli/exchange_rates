@@ -1,12 +1,11 @@
 import datetime
+
+from django.http import JsonResponse
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
-from .services import DecimalAsFloatJSONEncoder
+
+from .forms import ExchangeForm
 from .models import Rate
-from .forms import ExchangeForm, ExchangePair
+from .services import DecimalAsFloatJSONEncoder, calculate_exchange
 
 
 def index(request):
@@ -23,11 +22,11 @@ def exchange_rates(request):
 
 
 def exchange(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ExchangeForm(request.POST)
         if form.is_valid():
-            amount = form.cleaned_data['amount']
-            pair = request.POST['pair']
+            amount = form.cleaned_data["amount"]
+            pair = request.POST["pair"]
             return exchange_result(request, amount, pair)
     else:
         form = ExchangeForm()
@@ -35,8 +34,12 @@ def exchange(request):
 
 
 def exchange_result(request, amount, pair):
+    vendor, rate, result = calculate_exchange(amount, pair)
     context = {
+        "pair": pair,
         "amount": amount,
-        "pair": pair
+        "rate": rate,
+        "vendor": vendor,
+        "result": result,
     }
     return render(request, "exchange_result.html", context)
