@@ -3,6 +3,7 @@ import datetime
 from celery import shared_task
 
 from .exchange_provider import (Exchange, MonoExchange, PrivatExchange,
+                                RateAPIExchange, UniversalExchange,
                                 VkurseExchange)
 from .models import Rate
 
@@ -15,15 +16,21 @@ def start_exchange(vendor, currency_a, currency_b):
     ).exists()
 
     if is_rate_exists:
-        print(f"Rate already exists for {current_date} {vendor} {currency_a} {currency_b}")
+        print(
+            f"Rate already exists for {current_date} {vendor} {currency_a} {currency_b}"
+        )
         return
 
     if vendor == "mono":
         exchange = MonoExchange(vendor, currency_a, currency_b)
     elif vendor == "privat":
         exchange = PrivatExchange(vendor, currency_a, currency_b, current_date)
+    elif vendor == "universal":
+        exchange = UniversalExchange(vendor, currency_a, currency_b)
     elif vendor == "vkurse":
         exchange = VkurseExchange(vendor, currency_a, currency_b)
+    elif vendor == "rateapi":
+        exchange = RateAPIExchange(vendor, currency_a, currency_b)
     else:
         exchange = Exchange(vendor, currency_a, currency_b)
     exchange.get_rate()

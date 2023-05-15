@@ -16,19 +16,27 @@ class DecimalAsFloatJSONEncoder(DjangoJSONEncoder):
 def calculate_exchange(amount, pair):
     today = date.today()
     if pair == "UAHtoUSD":
-        rate = Rate.objects.filter(date=today, currency_a="USD").order_by("sell").first()
+        rate = (
+            Rate.objects.filter(date=today, currency_a="USD").order_by("sell").first()
+        )
         value = rate.sell
         result = round(amount / value, 2)
     elif pair == "UAHtoEUR":
-        rate = Rate.objects.filter(date=today, currency_a="EUR").order_by("sell").first()
+        rate = (
+            Rate.objects.filter(date=today, currency_a="EUR").order_by("sell").first()
+        )
         value = rate.sell
         result = round(amount / value, 2)
     elif pair == "USDtoUAH":
-        rate = Rate.objects.filter(date=today, currency_a="USD").order_by("-buy").first()
+        rate = (
+            Rate.objects.filter(date=today, currency_a="USD").order_by("-buy").first()
+        )
         value = rate.buy
         result = round(amount * value, 2)
     elif pair == "EURtoUAH":
-        rate = Rate.objects.filter(date=today, currency_a="EUR").order_by("-buy").first()
+        rate = (
+            Rate.objects.filter(date=today, currency_a="EUR").order_by("-buy").first()
+        )
         value = rate.buy
         result = round(amount * value, 2)
     else:

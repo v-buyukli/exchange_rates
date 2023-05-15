@@ -17,7 +17,7 @@ ____
 
 5. Runserver command:
 
-    `python manage.py runserver`,
+    `python manage.py runserver`
 
 6. Starting the worker process:
 
@@ -28,4 +28,5 @@ ____
    `celery -A exchange_rates beat`
 
 The app receives daily exchange rates for UAH-USD and UAH-EUR. 
-But for tests, you can change the time in the `/exchange_rates/celery.py` by changing the value of the variable `time_period`.
+But for tests, you can change the time in the `/exchange_rates/celery.py` by changing the value of the variable `time_period` 
+(for example, execute every minute: `time_period = crontab()`).
