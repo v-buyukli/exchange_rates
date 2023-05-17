@@ -1,17 +1,38 @@
 <!DOCTYPE html>
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Exchange</title>
 </head>
+
 <body>
-Notes: <br>
+<br>Notes: <br>
 - Currency exchange at the best rate for the user from available sources <br>
-- Amount is only a positive integer <br>
-<form method="post" action="{% url 'exchange-result' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Exchange">
+- Amount is only a positive integer <br><br>
+
+{# Display a form #}
+<form action="{% url 'exchange-result' %}" method="post" class="form">
+  {% csrf_token %}
+  <div class="col-md-2 centering">
+  {% bootstrap_form form %}
+  </div>
+  {% buttons %}
+    <button type="submit" class="btn btn-success">
+      Exchange
+    </button>
+  {% endbuttons %}
 </form>
+
 </body>
 </html>

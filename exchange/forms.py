@@ -16,12 +16,12 @@ class ExchangePair(Enum):
 
 
 class ExchangeForm(forms.Form):
-    amount = forms.IntegerField(min_value=1)
     pair = forms.ChoiceField(
-        label="Currency from-to",
+        label="Currency from-to:",
         choices=ExchangePair.choices(),
         widget=forms.RadioSelect(),
     )
+    amount = forms.IntegerField(label="Amount:", min_value=1)
 
     def clean_amount(self):
         amount = self.cleaned_data["amount"]

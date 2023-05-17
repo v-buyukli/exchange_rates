@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Exchange home</title>
+    <style>
+div {
+    padding-top: 30px;
+    padding-left: 30px;
+}
+</style>
 </head>
 
 <body>
+<div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     {{ context }} <br><br>
     <a href="{% url 'exchange-rates' %}">Exchange rates</a> <br>
     <a href="{% url 'exchange' %}">Exchange</a>
+</div>
 </body>
 </html>
