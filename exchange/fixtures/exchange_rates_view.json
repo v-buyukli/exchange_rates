@@ -1,0 +1,40 @@
+{
+  "current_rates": [
+    {
+      "id": 1,
+      "date": "2023-01-01",
+      "vendor": "mono",
+      "currency_a": "USD",
+      "currency_b": "EUR",
+      "sell": 0.97,
+      "buy": 1.03
+    },
+    {
+      "id": 2,
+      "date": "2023-01-01",
+      "vendor": "privat",
+      "currency_a": "USD",
+      "currency_b": "EUR",
+      "sell": 0.98,
+      "buy": 1.01
+    },
+    {
+      "id": 3,
+      "date": "2023-01-01",
+      "vendor": "universal",
+      "currency_a": "USD",
+      "currency_b": "EUR",
+      "sell": 0.0975,
+      "buy": 1.02
+    },
+    {
+      "id": 4,
+      "date": "2023-01-01",
+      "vendor": "vkurse",
+      "currency_a": "USD",
+      "currency_b": "EUR",
+      "sell": 1.01,
+      "buy": 1.0
+    }
+  ]
+}
