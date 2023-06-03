@@ -1,15 +1,21 @@
 import datetime
 import json
 import pathlib
-from django.core.management import call_command
+
 import pytest
 import responses
 from django.conf import settings
+from django.core.management import call_command
 from freezegun import freeze_time
-from .views import exchange_rates
 
-from .exchange_provider import (MonoExchange, PrivatExchange, RateAPIExchange,
-                                UniversalExchange, VkurseExchange)
+from .exchange_provider import (
+    MonoExchange,
+    PrivatExchange,
+    RateAPIExchange,
+    UniversalExchange,
+    VkurseExchange,
+)
+from .views import exchange_rates
 
 root = pathlib.Path(__file__).parent
 
@@ -18,6 +24,7 @@ root = pathlib.Path(__file__).parent
 def mocked():
     def inner(file_name):
         return json.load(open(root / "fixtures" / file_name))
+
     return inner
 
 

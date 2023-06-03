@@ -51,11 +51,16 @@ class PrivatExchange(Exchange):
         self.date = date.strftime("%d.%m.%Y")
 
     def get_rate(self):
-        r = requests.get(f"https://api.privatbank.ua/p24api/exchange_rates?json&date={self.date}&coursid=11")
+        r = requests.get(
+            f"https://api.privatbank.ua/p24api/exchange_rates?json&date={self.date}&coursid=11"
+        )
         r.raise_for_status()
 
         for rate in r.json()["exchangeRate"]:
-            if rate["currency"] == self.currency_a and rate["baseCurrency"] == self.currency_b:
+            if (
+                rate["currency"] == self.currency_a
+                and rate["baseCurrency"] == self.currency_b
+            ):
                 self.pair = SellBuy(rate["saleRate"], rate["purchaseRate"])
                 return
 
@@ -78,7 +83,9 @@ class VkurseExchange(Exchange):
         rate = r.json()
 
         if self.currency_a == "USD":
-            self.pair = SellBuy(float(rate["Dollar"]["sale"]), float(rate["Dollar"]["buy"]))
+            self.pair = SellBuy(
+                float(rate["Dollar"]["sale"]), float(rate["Dollar"]["buy"])
+            )
             return
         elif self.currency_a == "EUR":
             self.pair = SellBuy(float(rate["Euro"]["sale"]), float(rate["Euro"]["buy"]))
