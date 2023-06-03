@@ -1,10 +1,12 @@
 import datetime
 import json
 import pathlib
-
+from django.core.management import call_command
 import pytest
 import responses
 from django.conf import settings
+from freezegun import freeze_time
+from .views import exchange_rates
 
 from .exchange_provider import (MonoExchange, PrivatExchange, RateAPIExchange,
                                 UniversalExchange, VkurseExchange)
@@ -96,3 +98,16 @@ def test_rateapi_rate(mocked):
     e.get_rate()
     assert e.pair.buy == 36.9355
     assert e.pair.sell == 36.9413
+
+
+@pytest.fixture(scope="session")
+def django_db_setup(django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command("loaddata", "db_init.yaml")
+
+
+@freeze_time("2023-01-01")
+@pytest.mark.django_db
+def test_exchange_rates_view(mocked):
+    response = exchange_rates(None)
+    assert json.loads(response.content) == mocked("exchange_rates_view.json")
