@@ -17,6 +17,7 @@ from .exchange_provider import (
 )
 from .views import exchange_rates
 
+
 root = pathlib.Path(__file__).parent
 
 
