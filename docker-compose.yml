@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: db
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  django_migrations:
+    restart: on-failure
+    build: .
+    command: python manage.py migrate
+    depends_on:
+      - db
+
+  django:
+    restart: always
+    build: .
+    command: "python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - django_migrations
+
+  rabbit:
+    image: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+
+  celery:
+    build: .
+    restart: on-failure
+    depends_on:
+      - rabbit
+      - django_migrations
+    command: celery -A exchange_rates worker -l INFO
+    environment:
+      - BROKER_URL=amqp://admin:mypass@rabbit:5672//
+
+  celery_beat:
+    build: .
+    restart: on-failure
+    depends_on:
+      - celery
+    command: celery -A exchange_rates beat -l INFO
+    environment:
+      - BROKER_URL=amqp://admin:mypass@rabbit:5672//
