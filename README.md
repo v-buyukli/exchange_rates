@@ -13,8 +13,7 @@ Currencies from the database are used, with the best rate for the user.
 - Clone repository 
 - Build and run your app with Compose:  
   `docker compose up`
-- Enter in a browser to see the application running:  
-  *http://localhost:8000/*
+- Enter *http://localhost:8000/* in a browser to see the application running
 
 **Built With**: Python3, Django, Celery, Postgres, Docker Compose, and GitHub Actions.
 
