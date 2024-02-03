@@ -4,6 +4,7 @@ from enum import Enum
 
 import requests
 from django.conf import settings
+from fake_useragent import UserAgent
 
 
 class ExchangeCodes(Enum):
@@ -67,7 +68,10 @@ class PrivatExchange(Exchange):
 
 class UniversalExchange(Exchange):
     def get_rate(self):
-        r = requests.get("https://www.universalbank.com.ua/api/rates/json")
+        headers = {"User-Agent": UserAgent().chrome}
+        r = requests.get(
+            "https://www.universalbank.com.ua/api/rates/json", headers=headers
+        )
         r.raise_for_status()
 
         for rate in r.json():
