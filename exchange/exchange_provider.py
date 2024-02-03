@@ -68,8 +68,10 @@ class PrivatExchange(Exchange):
 
 class UniversalExchange(Exchange):
     def get_rate(self):
-        headers = {'User-Agent': UserAgent().chrome}
-        r = requests.get("https://www.universalbank.com.ua/api/rates/json", headers=headers)
+        headers = {"User-Agent": UserAgent().chrome}
+        r = requests.get(
+            "https://www.universalbank.com.ua/api/rates/json", headers=headers
+        )
         r.raise_for_status()
 
         for rate in r.json():
