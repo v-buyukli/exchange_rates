@@ -11,7 +11,7 @@ Currencies from the database are used, with the best rate for the user.
 ### Getting Started
 
 - Clone repository 
-- Build and run your app with Compose:  
+- Build and run app:  
   `docker compose up`
 - Enter *http://localhost:8000/* in a browser to see the application running
 
