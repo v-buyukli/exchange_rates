@@ -2,8 +2,8 @@ from decouple import config
 
 from .settings import *
 
-SECRET_KEY = config("SECRET_KEY")
 
+SECRET_KEY = config("SECRET_KEY")
 
 DATABASES = {
     "default": {
