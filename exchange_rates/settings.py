@@ -1,9 +1,10 @@
 from pathlib import Path
+from decouple import config
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-m-^oo)j_gty5jqk=-dy1une8c7sp%mfg#w^98k%2(e7j6xcdk*"
+SECRET_KEY = config("SECRET_KEY")
 
 DEBUG = True
 
@@ -54,10 +55,10 @@ WSGI_APPLICATION = "exchange_rates.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "db",
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
+        "HOST": config("DB_HOST"),
         "PORT": "5432",
     }
 }
@@ -89,4 +90,12 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-RATE_API_KEY = "c470a884897409054d8fd759"
+EXCHANGE_URLS = {
+    "MONO": "https://api.monobank.ua/bank/currency",
+    "PRIVAT": "https://api.privatbank.ua/p24api/exchange_rates?json&coursid=11",
+    "UNIVERSAL": "https://www.universalbank.com.ua/api/rates/json",
+    "VKURSE": "https://vkurse.dp.ua/course.json",
+    "RATE_API_BASE": "https://v6.exchangerate-api.com/v6",
+}
+
+RATE_API_KEY = config("RATE_API_KEY")
