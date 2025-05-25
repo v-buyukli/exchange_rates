@@ -35,13 +35,11 @@ class MonoExchange(Exchange):
     def get_rate(self):
         a_code = ExchangeCodes[self.currency_a].value
         b_code = ExchangeCodes[self.currency_b].value
-        r = requests.get("https://api.monobank.ua/bank/currency")
+        r = requests.get(settings.EXCHANGE_URLS["MONO"])
         r.raise_for_status()
 
         for rate in r.json():
-            currency_code_a = rate["currencyCodeA"]
-            currency_code_b = rate["currencyCodeB"]
-            if currency_code_a == a_code and currency_code_b == b_code:
+            if rate["currencyCodeA"] == a_code and rate["currencyCodeB"] == b_code:
                 self.pair = SellBuy(rate["rateSell"], rate["rateBuy"])
                 return
 
@@ -52,15 +50,15 @@ class PrivatExchange(Exchange):
         self.date = date.strftime("%d.%m.%Y")
 
     def get_rate(self):
-        r = requests.get(
-            f"https://api.privatbank.ua/p24api/exchange_rates?json&date={self.date}&coursid=11"
-        )
+        base_url = settings.EXCHANGE_URLS["PRIVAT"]
+        url = f"{base_url}&date={self.date}"
+        r = requests.get(url)
         r.raise_for_status()
 
-        for rate in r.json()["exchangeRate"]:
+        for rate in r.json().get("exchangeRate", []):
             if (
-                rate["currency"] == self.currency_a
-                and rate["baseCurrency"] == self.currency_b
+                rate.get("currency") == self.currency_a
+                and rate.get("baseCurrency") == self.currency_b
             ):
                 self.pair = SellBuy(rate["saleRate"], rate["purchaseRate"])
                 return
@@ -69,9 +67,8 @@ class PrivatExchange(Exchange):
 class UniversalExchange(Exchange):
     def get_rate(self):
         headers = {"User-Agent": UserAgent().chrome}
-        r = requests.get(
-            "https://www.universalbank.com.ua/api/rates/json", headers=headers
-        )
+        url = settings.EXCHANGE_URLS["UNIVERSAL"]
+        r = requests.get(url, headers=headers)
         r.raise_for_status()
 
         for rate in r.json():
@@ -82,37 +79,43 @@ class UniversalExchange(Exchange):
 
 class VkurseExchange(Exchange):
     def get_rate(self):
-        r = requests.get("https://vkurse.dp.ua/course.json")
+        url = settings.EXCHANGE_URLS["VKURSE"]
+        r = requests.get(url)
         r.raise_for_status()
         rate = r.json()
 
         if self.currency_a == "USD":
             self.pair = SellBuy(
-                float(rate["Dollar"]["sale"]), float(rate["Dollar"]["buy"])
+                float(rate["Dollar"]["sale"]),
+                float(rate["Dollar"]["buy"]),
             )
             return
         elif self.currency_a == "EUR":
-            self.pair = SellBuy(float(rate["Euro"]["sale"]), float(rate["Euro"]["buy"]))
+            self.pair = SellBuy(
+                float(rate["Euro"]["sale"]),
+                float(rate["Euro"]["buy"]),
+            )
             return
 
 
 class RateAPIExchange(Exchange):
     def get_rate(self):
-        base_url = "https://v6.exchangerate-api.com/v6"
+        base_url = settings.EXCHANGE_URLS["RATE_API_BASE"]
         api_key = settings.RATE_API_KEY
 
-        url_base_uah = f"{base_url}/{api_key}/latest/UAH"
-        url_base_usd = f"{base_url}/{api_key}/latest/USD"
-        url_base_eur = f"{base_url}/{api_key}/latest/EUR"
-        r_uah = requests.get(url_base_uah)
-        r_usd = requests.get(url_base_usd)
-        r_eur = requests.get(url_base_eur)
-        r_uah.raise_for_status()
-        r_usd.raise_for_status()
-        r_eur.raise_for_status()
-        rate_uah = r_uah.json()
-        rate_usd = r_usd.json()
-        rate_eur = r_eur.json()
+        urls = {
+            "UAH": f"{base_url}/{api_key}/latest/UAH",
+            "USD": f"{base_url}/{api_key}/latest/USD",
+            "EUR": f"{base_url}/{api_key}/latest/EUR",
+        }
+
+        responses = {k: requests.get(v) for k, v in urls.items()}
+        for response in responses.values():
+            response.raise_for_status()
+
+        rate_uah = responses["UAH"].json()
+        rate_usd = responses["USD"].json()
+        rate_eur = responses["EUR"].json()
 
         if self.currency_a == "USD":
             self.pair = SellBuy(

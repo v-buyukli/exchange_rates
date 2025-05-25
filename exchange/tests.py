@@ -33,7 +33,7 @@ def mocked():
 def test_exchange_mono(mocked):
     mocked_response = mocked("mono_response.json")
     responses.get(
-        "https://api.monobank.ua/bank/currency",
+        settings.EXCHANGE_URLS["MONO"],
         json=mocked_response,
     )
     e = MonoExchange("mono", "USD", "UAH")
@@ -46,8 +46,9 @@ def test_exchange_mono(mocked):
 def test_privat_rate(mocked):
     mocked_response = mocked("privat_response.json")
     date = datetime.date(2023, 5, 14)
+    url = f"{settings.EXCHANGE_URLS['PRIVAT']}&date={date.strftime('%d.%m.%Y')}"
     responses.get(
-        f"https://api.privatbank.ua/p24api/exchange_rates?json&date={date.strftime('%d.%m.%Y')}&coursid=11",
+        url,
         json=mocked_response,
     )
     e = PrivatExchange("privat", "USD", "UAH", date)
@@ -60,7 +61,7 @@ def test_privat_rate(mocked):
 def test_exchange_universal(mocked):
     mocked_response = mocked("universal_response.json")
     responses.get(
-        "https://www.universalbank.com.ua/api/rates/json",
+        settings.EXCHANGE_URLS["UNIVERSAL"],
         json=mocked_response,
     )
     e = UniversalExchange("universal", "USD", "UAH")
@@ -73,7 +74,7 @@ def test_exchange_universal(mocked):
 def test_vkurse_rate(mocked):
     mocked_response = mocked("vkurse_response.json")
     responses.get(
-        "https://vkurse.dp.ua/course.json",
+        settings.EXCHANGE_URLS["VKURSE"],
         json=mocked_response,
     )
     e = VkurseExchange("vkurse", "USD", "UAH")
@@ -89,16 +90,17 @@ def test_rateapi_rate(mocked):
     mocked_response_eur = mocked("rateapi_response_eur_response.json")
 
     api_key = settings.RATE_API_KEY
+    base_url = settings.EXCHANGE_URLS["RATE_API_BASE"]
     responses.get(
-        f"https://v6.exchangerate-api.com/v6/{api_key}/latest/UAH",
+        f"{base_url}/{api_key}/latest/UAH",
         json=mocked_response_uah,
     )
     responses.get(
-        f"https://v6.exchangerate-api.com/v6/{api_key}/latest/USD",
+        f"{base_url}/{api_key}/latest/USD",
         json=mocked_response_usd,
     )
     responses.get(
-        f"https://v6.exchangerate-api.com/v6/{api_key}/latest/EUR",
+        f"{base_url}/{api_key}/latest/EUR",
         json=mocked_response_eur,
     )
 
