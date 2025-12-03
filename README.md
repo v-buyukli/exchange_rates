@@ -16,6 +16,6 @@ Currencies from the database are used, with the best rate for the user.
   `docker compose up`
 - Enter *http://localhost:8000 (http://127.0.0.1:8000)* in a browser to see the application running
 
-**Built With**: Python3, Django, Celery, Postgres, Docker Compose, and GitHub Actions.
+**Note**: this repository is used for demonstration and testing purposes only.
 
-**Note**: This repository is used for demonstration and testing purposes only.
+**Built With**: Python3, Django, Celery, Postgres, Docker Compose, and GitHub Actions.
